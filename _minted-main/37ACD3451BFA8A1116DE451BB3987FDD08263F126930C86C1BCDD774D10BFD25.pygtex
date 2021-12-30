@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nt}{apiVersion}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{1}
+\PYG{n+nt}{providers}\PYG{p}{:}
+\PYG{p+pIndicator}{\PYGZhy{}} \PYG{n+nt}{name}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{InfluxDB}
+  \PYG{n+nt}{folder}\PYG{p}{:} \PYG{l+s}{\PYGZsq{}\PYGZsq{}}
+  \PYG{n+nt}{type}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{file}
+  \PYG{n+nt}{disableDeletion}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{false}
+  \PYG{n+nt}{editable}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{true}
+  \PYG{n+nt}{options}\PYG{p}{:}
+    \PYG{n+nt}{path}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{/etc/grafana/provisioning/dashboards}
+\end{Verbatim}

@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nt}{grafana}\PYG{p}{:}
+    \PYG{n+nt}{image}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{grafana/grafana:7.4.0}
+    \PYG{n+nt}{ports}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{3000:3000}
+    \PYG{n+nt}{volumes}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{grafana\PYGZus{}data:/var/lib/grafana}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{./grafana\PYGZhy{}provisioning/:/etc/grafana/provisioning}
+    \PYG{n+nt}{depends\PYGZus{}on}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{influxdb}
+\end{Verbatim}

@@ -1,0 +1,386 @@
+La arquitectura usada para la telemetría se encuentra definida en la figura
+\ref{fig:arquitectura_general_monitor}
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=\linewidth,
+    inkscapelatex=false]{images/arquitectura_telemetria.svg}
+    \caption{Arquitectura general}
+    \label{fig:arquitectura_general_monitor}
+\end{figure}
+
+
+Durante la configuración de la arquitectura se hace uso de herramientas tales
+como docker, docker-compose en entornos linux, usando instancias en la nube. 
+
+\newpage
+\subsubsection{Configuración MQTT broker}
+
+\begin{flushleft}
+  \textbf{Configuración del servicio: MQTT broker.}
+\end{flushleft}
+
+\begin{minted}{yaml}
+  mosquitto: 
+    image: eclipse-mosquitto:2 
+    ports:
+      - 1883:1883 
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf 
+      - mosquitto_data:/mosquitto/data 
+      - mosquitto_log:/mosquitto/log 
+\end{minted}
+
+En esta sección se definen las siguientes propiedades. 
+\begin{enumerate}
+  \item Nombre del servicio dentro del archivo docker-compose.yml.
+  \item Vamos a utilizar la versión 2 de la imagen oficial eclipse-mosquitto.
+  \item El broker MQTT estará aceptando peticiones en el puerto 1883.
+  \item Creamos un volumen de tipo bind mount para enlazar el archivo de
+    configuración mosquitto.conf que tenemos en nuestro directorio local
+    mosquitto con el directorio /mosquitto/config/mosquitto.conf del broker
+    MQTT.
+  \item Creamos un volumen para almacenar los mensajes que se reciben.
+  \item Creamos un volumen para almacenar los mensajes de log.
+\end{enumerate}
+
+Es necesario realizar una configuración dentro del archivo
+./mosquitto/mosquitto.conf para poder admitir conexiones al broker. 
+\begin{minted}{yaml}
+listener 1883
+allow_anonymous true
+\end{minted}
+Donde se indica lo siguiente: 
+\begin{enumerate}
+  \item{listener 1883: es para habilitar la interfaz y el puerto en escucha del
+    borker}
+  \item{allow\_anonymous: deshabilita los protocolos de autenticación. siendo
+    necesario indicarlo en algunas versiones del broker. }
+\end{enumerate}
+
+\begin{flushleft}
+  \textbf{Configuración del servicio: Telegraf}
+\end{flushleft}
+\begin{minted}{yaml}
+  telegraf: 
+    image: telegraf:1.18 
+      volumes:
+        - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf 
+      depends_on: 
+        - influxdb
+\end{minted}
+\begin{enumerate}
+  \item Nombre del servicio dentro del archivo docker-compose.yml.
+  \item Utilizamos la imagen Docker telegraf que tiene la etiqueta 1.18.
+  \item Creamos un volumen de tipo bind mount para enlazar el archivo de
+    configuración telegraf.conf que tenemos en nuestro directorio local
+    telegraf con el archivo /etc/telegraf/telegraf.conf del contenedor.
+  \item Indicamos que este servicio depende del servicio influxdb y que no
+    podrá iniciarse hasta que el servicio de influxdb se haya iniciado.
+\end{enumerate}
+
+A partir de crear el servicio, es necesario genera un archivo de configuración, 
+\begin{minted}{bash}
+docker run --rm telegraf telegraf config > telegraf.conf
+\end{minted}
+Una vez creado el archivo es de configuración es necesario alojarlo en como se
+muestra a continuación. (./telegraf/telegraf.conf)
+\begin{minted}{bash}
+.(directorio base)
+--docker-compose.yml
+----mosquitto
+     --mosquitto.conf
+----telegraf
+     --telegraf.conf
+\end{minted}
+Dentro del mismo se encuentran bastantes configuraciones, disponibles para todos
+los servicios y protocolos que soporta telegraf, sin embargo para el propósito
+de la aplicación solo es necesario configurar las siguientes secciones.
+
+\begin{enumerate}
+  \item inputs.mqtt\_consumer: En este se encuentran definidas todas las
+    propiedades y configuraciones requeridas para realizar la conexion hacia el
+    broker MQTT en este caso mosquitto-eclipse. 
+  \item output.influxdb: Aloja las configuración relacionadas a la salida que e
+    este generara.
+\end{enumerate}
+
+Para el caso de inputs.mqtt\_consumer, hay distintos parametros de
+configuración.
+\begin{enumerate}
+  \item servers:En este es necesario indicar la url donde esta alojado el
+    broker, para este proyecto dado que se esta haciendo uso de docker solo es
+    necesario poner el nombre del servicio. 
+  \item topics: indica los tópicos a los que el cliente(telegraf) se
+    subscribirá. 
+  \item data\_format: indica el formato del tipo de dato que estaremos
+    recibiendo a travez del mqtt broker. 
+\end{enumerate}
+\begin{minted}{bash}
+ [[inputs.mqtt_consumer]]
+   servers = ["tcp://mosquitto:1883"] 
+
+   topics = [
+     "esp23/#" //indica que nos queremos subscribir  a todos los topics a
+     //partir de esp32
+   ]
+
+   data_format = "influx" 
+\end{minted}
+
+Por otro lado, para el caso de output.influxdb, los parametros son los
+siguientes:
+\begin{enumerate}
+  \item Urls: indica el url de donde esta alojada el servicio de influxdb,
+    (igual que el caso anterior el url corresponde con el nombre del servicio
+    en docker)
+  \item Database: indica el nombre de la base de datos. 
+  \item Skip\_database\_creation: valor booleano que define si se crearan o no,
+    las bases de datos, generalmente la idea es tener la tabla definida con
+    anterioridad. 
+  \item Username: corresponde a los nombres de usuario declarados en el
+    servicio de docker-compose. 
+  \item Password:corresponde a las contraseñas declaradas en el
+    servicio dentro del archivo docker-compose.yaml.
+\end{enumerate}
+
+
+
+\begin{flushleft}
+  \textbf{Configuración del servicio: InfluxDB}
+\end{flushleft}
+
+\begin{minted}{yaml}
+influxdb: 
+    image: influxdb:1.8 
+    ports:
+      - 8086:8086 
+    volumes:
+      - influxdb_data:/var/lib/influxdb 
+    environment:
+      - INFLUXDB_DB=esp32 
+      - INFLUXDB_ADMIN_USER=root 
+      - INFLUXDB_ADMIN_PASSWORD=root 
+      - INFLUXDB_HTTP_AUTH_ENABLED=true 
+\end{minted}
+
+\begin{enumerate}
+  \item Nombre del servicio dentro del archivo docker-compose.yml.
+  \item Utilizamos la imagen Docker influxdb que tiene la etiqueta 1.8.
+  \item Este servicio utilizará el puerto 8086 de nuestra máquina local para
+    enlazarlo con el puerto 8086 el contenedor.
+  \item Creamos un volumen con el nombre influxdb\_data que estará enlazado con
+    el directorio /var/lib/influxdb del contenedor.
+  \item Nombre de la base de datos.
+  \item Usuario de la base de datos.
+  \item Contraseña del usuario de la base de datos.
+  \item Habilitamos la autenticación básica HTTP.
+\end{enumerate}
+
+\begin{flushleft}
+  \textbf{Configuración del servicio: Grafana}
+\end{flushleft}
+La configuración de grafana esta conpuesta con las siguientes bases.
+
+\begin{minted}{yaml}
+grafana: 
+    image: grafana/grafana:7.4.0 
+    ports:
+      - 3000:3000 
+    volumes:
+      - grafana_data:/var/lib/grafana 
+      - ./grafana-provisioning/:/etc/grafana/provisioning 
+    depends_on: 
+      - influxdb
+\end{minted}
+
+\begin{enumerate}
+\item Nombre del servicio dentro del archivo docker-compose.yml.
+\item Utilizamos la imagen Docker grafana.
+\item Este servicio utilizará el puerto 3000 de nuestra máquina local para
+  enlazarlo con el puerto 3000 el contenedor.
+\item Creamos un volumen con el nombre grafana\_data que estará enlazado con el
+  directorio /var/lib/grafana del contenedor.
+\item Indicamos que este servicio depende del servicio influxdb y que no podrá
+  iniciarse hasta que el servicio de influxdb se haya iniciado.
+\end{enumerate}
+
+
+Como parte importante es necesario configurar las fuentes de datos,
+configuraciones generales, en este caso, se declaran a partir de archivos yml
+en diferentes directorios dentro de el espacio de trabajo de grafana. 
+
+Archivos de configuración son los siguientes:
+
+El archivo inferior, corresponde al aprovisionamiento automatico de las fuentes
+de datos, en el caso siguiente grafana cuenta con funciones directamente para
+conectase a influxDB.
+\begin{minted}{yaml}
+apiVersion: 1
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    database: esp32 
+    user: root 
+    password: root 
+    url: http://influxdb:8086 
+    isDefault: true
+    editable: true
+\end{minted}
+Parámetros: 
+\begin{enumerate}
+  \item Nombre de la base de datos InfluxDB
+  \item Nombre de usuario para acceder a la base de datos
+  \item Contraseña del usuario para acceder a la base de datos
+  \item URL del servicio InfluxDB
+\end{enumerate}
+
+El archivo de configuración inferior, crea un aprovisionamiento automático de
+dashboards, donde los mismos podrían ser definidos, base a la documentación de
+grafana, revisando cada uno de los parámetros que se pueden agregar al
+archivo.json del dashboard a crear.
+    
+
+
+\begin{minted}{yaml}
+apiVersion: 1
+providers:
+- name: InfluxDB
+  folder: ''
+  type: file
+  disableDeletion: false
+  editable: true
+  options:
+    path: /etc/grafana/provisioning/dashboards
+\end{minted}
+
+Parámetros: 
+\begin{enumerate}
+  \item Nombre del servicio dentro del archivo docker-compose.yml.
+  \item Utilizamos la imagen Docker grafana.
+  \item Este servicio utilizará el puerto 3000 de nuestra máquina local para
+    enlazarlo con el puerto 3000 el contenedor.
+  \item Creamos un volumen con el nombre grafana\_data que estará enlazado con
+    el directorio /var/lib/grafana del contenedor.
+  \item Creamos un volumen de tipo bind mount entre el directorio local de
+    nuestra máquina ./grafana-provisioning/ y el directorio
+    /etc/grafana/provisioning del contenedor.
+  \item Indicamos que este servicio depende del servicio influxdb y que no
+    podrá iniciarse hasta que el servicio de influxdb se haya iniciado.
+\end{enumerate}
+
+
+A cada archivo le corresponde un sitio en el espacio de trabajo(directorio) 
+
+\begin{minted}{yaml}
+.(directorio de trabajo)
+grafana-provisioning
+---dashboards
+  ----CO2Dashboard.json
+  ----dashboard.yml
+---datasources
+  ----datasource.yml
+\end{minted}
+
+En la documentación ofical se pueden obtener datos o propiedades de una
+dashboard por ejemplo.
+\href{https://grafana.com/docs/grafana/latest/dashboards/}{grafana
+docs}.
+
+
+
+\subsubsection{Configuración general}
+Durante la configuración de los servicios y instacias requeridas se parte de
+los siguietes requerimientos. 
+\begin{enumerate}
+  \item Docker, docker-compose. \href{https://docs.docker.com/compose/}{guia}.
+  \item alguna maquina, o instancia en la nube disponible para hostear los
+    servicios.
+\end{enumerate}
+
+Partiendo de ello, se llevan es necesario, seguir todas las instrucciones
+anteriores para poder implementar dicho monitor. 
+
+En la parte superior se encuentra disponible el archivo docker-compose.yml.
+\begin{minted}{yaml}
+version: '3'
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    ports:
+      - 1883:1883
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+
+  telegraf:
+    image: telegraf:1.18
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+    depends_on:
+      - influxdb
+
+  influxdb:
+    image: influxdb:1.8
+    ports:
+      - 8086:8086
+    volumes:
+      - influxdb_data:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=${INFLUXDB_DB}
+      - INFLUXDB_ADMIN_USER=${INFLUXDB_USERNAME}
+      - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_PASSWORD}
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+
+  grafana:
+    image: grafana/grafana:7.4.0
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana-provisioning/:/etc/grafana/provisioning
+    depends_on:
+      - influxdb
+
+  chronograf:
+    image: chronograf:1.8
+    ports:
+      - 8888:8888
+    volumes:
+      - chronograf_data:/var/lib/chronograf
+    depends_on:
+      - influxdb
+    environment:
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_USERNAME=${INFLUXDB_USERNAME}
+      - INFLUXDB_PASSWORD=${INFLUXDB_PASSWORD}
+
+volumes:
+  mosquitto_data:
+  mosquitto_log:
+  node_red_user_data:
+  influxdb_data:
+  grafana_data:
+  chronograf_data:
+\end{minted}
+
+Finalmente seria tan simple como usar el comando docker-compose up -d para
+correr todos los servicios que involucran a la solucion, y declarar un par
+variables de entorno (.env), serian las contraseñasde influxdb, usuario, nombre
+de la base de datos, y las credenciales para grafana. todas estas se ecunetran
+entre llave, con un signo de dolar al inicio dentro del archivo de
+configuración.
+
+\textbf{**Nota:} En el caso del proyecto en mencion se esta haciendo uso del
+servicio ec2 de Amazon Web Services, para alojar la maquina virtual que soporta
+los servicios. Siendo posible instanciar dichos servicios en un entorno local
+con ciertas características**.
+
+{\tiny ** una ip publica, en caso de no estar alojada esta en la misa seccion
+de red.}
+
+
+

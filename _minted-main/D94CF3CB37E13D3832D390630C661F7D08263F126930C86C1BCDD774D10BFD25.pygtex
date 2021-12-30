@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{l+lScalar+lScalarPlain}{.(directorio de trabajo)}
+\PYG{l+lScalar+lScalarPlain}{grafana\PYGZhy{}provisioning}
+\PYG{l+lScalar+lScalarPlain}{\PYGZhy{}\PYGZhy{}\PYGZhy{}dashboards}
+  \PYG{l+lScalar+lScalarPlain}{\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}CO2Dashboard.json}
+  \PYG{l+lScalar+lScalarPlain}{\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}dashboard.yml}
+\PYG{l+lScalar+lScalarPlain}{\PYGZhy{}\PYGZhy{}\PYGZhy{}datasources}
+  \PYG{l+lScalar+lScalarPlain}{\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}datasource.yml}
+\end{Verbatim}

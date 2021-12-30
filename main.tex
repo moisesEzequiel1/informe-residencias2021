@@ -1,0 +1,120 @@
+\nonstopmode
+\input{formato/header} 
+\begin{document}
+\input{contenido/encabezado} 
+\section{Introducción}
+
+Generalidades del modelado de sistemas
+
+
+\section{Marco teórico} 
+\subsection{Variables físicas involucradas en un micro-invernadero} 
+\input{contenido/variablesfiscas.tex}
+\subsection{Monitor de sensores}
+\input{contenido/detalles_monitoreo}
+\subsection{Topologías empleadas en el modelado de sistemas}
+\subsubsection{Modelado convencional}
+
+\subsubsection{Redes neuronales empleadas como métodos alternativos}
+Las redes neuronales artificiales ´(ANN) simulan al  sistema nervioso, que
+aprende y reacciona frente a estímulos externos. Son agrupaciones de neuronas
+unidas por enlaces que transmiten información a otras neuronas, las cuales la
+transforman mediante una función de  excitación. \par Las ANN aprenden de la
+información histórica a través de un entrenamiento o ajuste de los parámetros
+de la red, que procesa los estímulos y entrega la respuesta deseada,
+adquiriendo la capacidad de predecir nuevos estados del mismo fenómeno. Las
+redes neuronales pueden tener diversas configuraciones.El número de capas
+ocultas, así como el número de neuronas en cada una de las capas puede variar
+según las necesidades del problema a resolver. \cite{brahm2003disminucion}
+
+\section{Planteamiento del problema} 
+El problema inicial
+\section{Antecedentes}
+\input{contenido/antecendentes}
+
+\section{Hipótesis}
+Durante el tratamiento del trabajo, dentro de los requerimientos es necesario
+analizar y definir los posibles casos que se pueden presentar en el modelado
+por redes neuronales. 
+
+    
+En la investigación se definen las las siguientes hipótesis. 
+\begin{itemize}
+    \item {Las variables físicas involucradas en el micro-invernadero,
+        describen de manera acertada los fenómenos físicos involucrados dentro
+        de este, las variables mencionadas corresponde a humedad, temperatura,
+    medidas por un sensor de tipo THD-D producido por Autonics.}
+    \item {Mediante el estudio y monitoreo de las variables físicas
+           involucradas se determina la variable con mayor efecto sobre las
+           condiciones físicas a las que se pudiese encontrar sometida la humedad de
+           suelo.}
+    \item {Las humedad de suelo esta relacionada estrechamente con las
+        condiciones en el aire, tipo suelo, temporada del año, y zona
+    geográfica.  dentro del habitáculo(invernader).}
+\item {Implementar un sistema de monitoreo de los distintos sensores y
+    actuadores involucrados.}
+\end{itemize}
+\section{Objetivo}
+Diseñar un modelo empleando sistemas de aprendizaje autónomo, aprendizaje de
+maquinas, para la humedad de suelo en un micro-invernadero.
+\subsection{Objetivos específicos}
+\begin{enumerate}
+    \item {Ampliar el campo de estudio en las áreas de modelado y control, con
+        un enfoque en la tecnologías en tendencias.}
+    \item {Desarrollo de un modelo un modelo   inteligente utilizando
+        herramientas del campo del aprendizaje autónomo}
+    \item Describir el comportamiento de humedad de suelo en un
+        micro-invernadero. 
+\end{enumerate}
+\section{Justificación}
+Los modelos que describen las dinámicas de un sistema como en el casos de los
+siguientes tipos de sistemas Los modelos que describen la dinámica de un
+sistema como en el caso de los invernaderos, son de suma importancia para el
+estudio de distintos métodos de control. Comúnmente los modelos son
+representaciones matemáticas de los sistemas físicos normalmente un modelo se
+utiliza para describir dinámicas de diferentes tipos de sistemas. Estos pueden
+ser sistemas complejos y generalmente se busca obtener el modelo que represente
+un ambiente de trabajo de la forma más óptima y eficiente que sea posible.
+Durante el periodo ene-junio 2021 en el laboratorio de mecatrónica y control de
+posgrado en el tecnológico de Culiacán, se realizó la documentación relacionada
+al modelado matemático de estos sistemas.
+
+
+
+\par Se destacan alguna característica, tales como un sistema multi-entrada
+(sistemas tipo mimo), para controlar múltiples salidas.  Dada la complejidad de
+estos sistemas se busca emplear una alternativa, como los sistemas de
+aprendizaje automático, criterios de redes neuronales, buscando una solución
+que se basa en datos reales del sistema que se desea describir para representar
+un sistema no-lineal (sistema invernadero).  
+
+\par Por lo tanto, en este trabajo se desarrollará un modelo basado en una
+estructura de redes neuronales para determinar el comportamiento de la humedad
+de suelo en un micro – invernadero.
+
+\subsection{Referentes mexicanos}
+%\input{contenido/referenciaspersonas} 
+\section{Limitantes}
+\subsection{Limitaciones en el campo de modelado con redes neuronales}
+Las redes neuronales artificiales (ANN) tienen un problema para modelar los
+fenómenos de lluvia y escorrentía: el tiempo requerido para lograr un buen
+entrenamiento. Esto se debe principalmente al uso de algoritmos lentos y al
+elevado número de parámetros. \cite{brahm2003disminucion} Cuáles son las
+limitaciones del proyecto\cite{1aa6ddcb00bd4d8692d2b66d981c534f} 
+\section{Desarrollo}
+\subsection{Modelado de sistemas}
+\input{contenido/algoritmos_de_referencia}
+% Algortimo de retropropagacoin descripcion del modelo matemático
+\input{contenido/redesneuronalessec} 
+\input{contenido/detalles_modelado}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Configuraciones del monitor}
+\input{contenido/configuracion_monitor}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Referencias} 
+\bibliographystyle{IEEEtran} 
+\bibliography{refer}
+\section{Anexos} 
+\subsection{Cronograma}
+    \input{anexos/cronograma}
+\end{document}

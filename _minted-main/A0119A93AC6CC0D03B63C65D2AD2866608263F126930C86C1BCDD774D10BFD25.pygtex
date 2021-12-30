@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nt}{influxdb}\PYG{p}{:}
+    \PYG{n+nt}{image}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{influxdb:1.8}
+    \PYG{n+nt}{ports}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{8086:8086}
+    \PYG{n+nt}{volumes}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{influxdb\PYGZus{}data:/var/lib/influxdb}
+    \PYG{n+nt}{environment}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{INFLUXDB\PYGZus{}DB=esp32}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{INFLUXDB\PYGZus{}ADMIN\PYGZus{}USER=root}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{INFLUXDB\PYGZus{}ADMIN\PYGZus{}PASSWORD=root}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{INFLUXDB\PYGZus{}HTTP\PYGZus{}AUTH\PYGZus{}ENABLED=true}
+\end{Verbatim}

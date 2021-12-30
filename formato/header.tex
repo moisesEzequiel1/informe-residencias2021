@@ -1,0 +1,76 @@
+\documentclass[11pt, a4paper]{article}
+%\documentclass{IEEEtran}
+\usepackage{booktabs}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{float}
+
+\usepackage{parskip} 
+\usepackage{hyperref}
+
+\usepackage[margin=2.9cm]{geometry}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\graphicspath{{images/}}
+\usepackage{adjustbox}
+\usepackage{url}
+
+\usepackage{minted}
+
+\usepackage{svg}
+\usepackage{svg-extract}
+\usepackage{fancyhdr}
+
+\usepackage{listings}
+
+%manejo util de las referencias
+\usepackage{etoolbox}
+\patchcmd{\thebibliography}{\section*{\refname}}{}{}{}
+\patchcmd{\thebibliography}{\addcontentsline{toc}{section}{\refname}}{}{}{}
+%Declarando Variables globales
+\newcommand{\typeofdoc}{Tesis}
+\newcommand{\subject}{Moises}
+\newcommand{\infname}{Diseño de un modelo por redes neuronales para la humedad
+de suelo en un micro–invernadero} %Name of doc
+\newcommand{\teacher}{Luis Barreto}
+\newcommand{\startdate}{23 de septiembre 2021}
+
+%Adicionales
+\setlength{\headheight}{48pt}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\includegraphics[height=1.5cm]{dZNbudei.jpg}}
+\rhead{\includegraphics[width=2.5cm]{logo-tecnm.png}}
+\renewcommand*\contentsname{Índice}
+%%codigo
+\renewcommand{\lstlistingname}{Código} 
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nt}{apiVersion}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{1}
+\PYG{n+nt}{datasources}\PYG{p}{:}
+  \PYG{p+pIndicator}{\PYGZhy{}} \PYG{n+nt}{name}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{InfluxDB}
+    \PYG{n+nt}{type}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{influxdb}
+    \PYG{n+nt}{access}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{proxy}
+    \PYG{n+nt}{database}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{esp32}
+    \PYG{n+nt}{user}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{root}
+    \PYG{n+nt}{password}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{root}
+    \PYG{n+nt}{url}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{http://influxdb:8086}
+    \PYG{n+nt}{isDefault}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{true}
+    \PYG{n+nt}{editable}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{true}
+\end{Verbatim}

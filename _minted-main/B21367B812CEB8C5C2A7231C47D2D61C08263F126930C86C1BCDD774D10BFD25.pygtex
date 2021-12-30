@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n+nt}{telegraf}\PYG{p}{:}
+    \PYG{n+nt}{image}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{telegraf:1.18}
+      \PYG{l+lScalar+lScalarPlain}{volumes}\PYG{p+pIndicator}{:}
+        \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf}
+    \PYG{+Error}{  }\PYG{n+nt}{depends\PYGZus{}on}\PYG{p}{:}
+        \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{influxdb}
+\end{Verbatim}

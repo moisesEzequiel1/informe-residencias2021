@@ -1,0 +1,63 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nt}{version}\PYG{p}{:} \PYG{l+s}{\PYGZsq{}3\PYGZsq{}}
+
+\PYG{n+nt}{services}\PYG{p}{:}
+  \PYG{n+nt}{mosquitto}\PYG{p}{:}
+    \PYG{n+nt}{image}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{eclipse\PYGZhy{}mosquitto:2}
+    \PYG{n+nt}{ports}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{1883:1883}
+    \PYG{n+nt}{volumes}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{mosquitto\PYGZus{}data:/mosquitto/data}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{mosquitto\PYGZus{}log:/mosquitto/log}
+
+  \PYG{n+nt}{telegraf}\PYG{p}{:}
+    \PYG{n+nt}{image}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{telegraf:1.18}
+    \PYG{n+nt}{volumes}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf}
+    \PYG{n+nt}{depends\PYGZus{}on}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{influxdb}
+
+  \PYG{n+nt}{influxdb}\PYG{p}{:}
+    \PYG{n+nt}{image}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{influxdb:1.8}
+    \PYG{n+nt}{ports}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{8086:8086}
+    \PYG{n+nt}{volumes}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{influxdb\PYGZus{}data:/var/lib/influxdb}
+    \PYG{n+nt}{environment}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{INFLUXDB\PYGZus{}DB=\PYGZdl{}\PYGZob{}INFLUXDB\PYGZus{}DB\PYGZcb{}}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{INFLUXDB\PYGZus{}ADMIN\PYGZus{}USER=\PYGZdl{}\PYGZob{}INFLUXDB\PYGZus{}USERNAME\PYGZcb{}}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{INFLUXDB\PYGZus{}ADMIN\PYGZus{}PASSWORD=\PYGZdl{}\PYGZob{}INFLUXDB\PYGZus{}PASSWORD\PYGZcb{}}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{INFLUXDB\PYGZus{}HTTP\PYGZus{}AUTH\PYGZus{}ENABLED=true}
+
+  \PYG{n+nt}{grafana}\PYG{p}{:}
+    \PYG{n+nt}{image}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{grafana/grafana:7.4.0}
+    \PYG{n+nt}{ports}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{3000:3000}
+    \PYG{n+nt}{volumes}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{grafana\PYGZus{}data:/var/lib/grafana}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{./grafana\PYGZhy{}provisioning/:/etc/grafana/provisioning}
+    \PYG{n+nt}{depends\PYGZus{}on}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{influxdb}
+
+  \PYG{n+nt}{chronograf}\PYG{p}{:}
+    \PYG{n+nt}{image}\PYG{p}{:} \PYG{l+lScalar+lScalarPlain}{chronograf:1.8}
+    \PYG{n+nt}{ports}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{8888:8888}
+    \PYG{n+nt}{volumes}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{chronograf\PYGZus{}data:/var/lib/chronograf}
+    \PYG{n+nt}{depends\PYGZus{}on}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{influxdb}
+    \PYG{n+nt}{environment}\PYG{p}{:}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{INFLUXDB\PYGZus{}URL=http://influxdb:8086}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{INFLUXDB\PYGZus{}USERNAME=\PYGZdl{}\PYGZob{}INFLUXDB\PYGZus{}USERNAME\PYGZcb{}}
+      \PYG{p+pIndicator}{\PYGZhy{}} \PYG{l+lScalar+lScalarPlain}{INFLUXDB\PYGZus{}PASSWORD=\PYGZdl{}\PYGZob{}INFLUXDB\PYGZus{}PASSWORD\PYGZcb{}}
+
+\PYG{n+nt}{volumes}\PYG{p}{:}
+  \PYG{n+nt}{mosquitto\PYGZus{}data}\PYG{p}{:}
+  \PYG{n+nt}{mosquitto\PYGZus{}log}\PYG{p}{:}
+  \PYG{n+nt}{node\PYGZus{}red\PYGZus{}user\PYGZus{}data}\PYG{p}{:}
+  \PYG{n+nt}{influxdb\PYGZus{}data}\PYG{p}{:}
+  \PYG{n+nt}{grafana\PYGZus{}data}\PYG{p}{:}
+  \PYG{n+nt}{chronograf\PYGZus{}data}\PYG{p}{:}
+\end{Verbatim}

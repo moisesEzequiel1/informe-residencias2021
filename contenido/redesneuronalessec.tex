@@ -1,0 +1,174 @@
+\subsection{Pasos a seguir en el entrenamiento de una red neuronal}
+\begin{enumerate}
+    \item Inicializar los pesos de la red con valores aleatorios.
+    \item Presentar un patrón de entrada $X_p : (x_{p_1}, x_{p_2}, ...,
+        x_{p_N})$ y especificar la salida deseada que debe generar la red:
+        $(d_1, d_2,..., d_M)$, si la red se utiliza como clasificador, todas
+        las salidas serán cero, salvo una, la que sea de la clase a la que
+        pertenece el patrón de entrada.  
+    \item Calcular la salida actual de la red, para ello, para la entrada
+        presentada, se van obteniendo los valores de las respuestas que
+        presenta cada capa hasta llegar a la capa de salida.
+    \item Después que todas las neuronas de la red tienen un valor de
+        activación asociado para un patrón de entrada dado, el algoritmo
+        continúa encontrando el error que se presenta para cada neurona,
+        excepto las de la capa de entrada. Para la neurona k de la capa de
+        salida, si la respuesta es $(y_1, y_2,..., y_M)$, dicho error (d) se
+        puede escribir como la ec. 
+    \item Para la actualización de los pesos utilizamos el algoritmo recursivo,
+        comenzando por las neuronas de salida y trabajando hacia atrás hasta
+        llegar a la capa de entrada, ajustando los pesos.
+    \item El proceso se repite hasta que la medida utilizada para calcular el
+        error llega al valor esperado(en estos pasos normalmente se hace uso de
+        MSE error cuadrático medio).
+    \item \textbf{Nota:} Los criterios matemáticos que describen estos pasos se
+        encuentran descritos en la sección algoritmos de optimización. con el
+        nombre de algoritmos de retro-propagación\ref{ref-sec-retropropagacion}.
+\end{enumerate}
+\subsubsection{Algoritmos de optimización}
+\par\textbf{Algoritmo de retro-propagación \label{ref-sec-retropropagacion}}
+
+Este procedimiento fue descubierto de forma independiente por tres
+investigadores, David Rumelhart, Davi Parker, Yann Le Cun. 
+
+Este consiste en realizar dos pasadas para cada vector de entradas presente en
+la red. El paso hacia adelante consiste en presentar el vector correspondiente
+en las unidades de entrada a través de los diferentes niveles de la red hasta
+producir un vector de salida.  En el paso hacia atrás se propaga hacia atrás el
+valor de la derivada del error( se considera como error la diferencia entre el
+vector de salida obteniendo y el vector de salida que se debía haber obtenido
+realmente). Este procedimiento permite que la red calcule, para cada uno de sus
+pesos, el gradiente de error respecto a dicho peso, y modifique los valores en
+la dirección adecuada para producir una disminución del valor del error. De
+esta forma el aprendizaje funciona mediante la realización del gradiente
+descendente a lo largo de la superficie del error sobre el espacios de pesos
+configurado. \cite{paralelas1987facultad}
+
+
+Criterios matemáticos del algoritmo de retro-propagación.
+\par Como varia el coste ante un cambio en el parámetro W 
+\par Donde: 
+\begin{align*}
+    W & = Pesos \\
+    Coste & = Salida\ de\ la\ red\ neuronal
+\end{align*}
+\par Al tener dos parámetros en la red neuronal Uno de bias y otro de Pesos
+\begin{align*}
+    Y = W_1 + b 
+\end{align*}
+\par Requerimos dos derivadas parciales para calcular el error:
+\begin{equation*}
+    \frac{\partial C}{\partial {bias}^{capa}} \ \frac{\partial C}{\partial
+    {pesos}^{capa}}
+\end{equation*}
+\begin{itemize}
+    \item  Resultado de la suma ponderada capa por capa:
+        \begin{equation}
+            Z^{capa} = W^{capa} X + b^{capa}
+            \label{eq:redesneurales_sumaponderada}
+        \end{equation}
+    \item Función de activación
+        \begin{equation*}
+            a(Z^{capa})
+        \end{equation*}
+    \item Función de coste
+        \begin{equation*}
+            C(a(z^{capa})) = Error
+        \end{equation*}
+\end{itemize}
+\par Para calcular la derivada de una composición de funciones se utiliza la
+regla de la cadena lo que nos dice que para calcular la derivada de una
+composición de funciones simplemente es necesario multiplicar cada una de las
+derivadas intermedias.  
+\begin{align*}
+    \frac{\partial C}{\partial w^{capa}} &= \frac{\partial C}{\partial
+        a^{capa}} * \frac{\partial a^{capa}}{\partial z^{capa}} * \frac{\partial
+    z^{capa}}{\partial w^{capa}} \\ 
+    \frac{\partial C}{\partial b^{capa}} &= \frac{\partial C}{\partial
+        a^{capa}} * \frac{\partial a^{capa}}{\partial z^{capa}} *
+        \frac{\partial z^{capa}}{\partial b^{capa}} \\ 
+             & Para \\
+    Z^{capa} &= W^{capa} X + b^{capa}\\ & C(a(z^{capa})) 
+\end{align*}
+\par Describiendo cada derivada
+\begin{itemize}
+    \item Derivada de la activación respecto al coste o error:
+        \begin{align*}
+            C(a_j^{capa}) &= \frac{1}{2} \sum_i (y_j - a_j^{capa})^2 \\
+            entonces & \\
+            \frac{\partial C}{\partial a_j^{capa}} &= (a_j^{capa}-y_j)
+        \end{align*}
+    \item Derivada de la suma ponderada respecto a la activación
+        \par \textbf{Esto dependerá de cada función de activación }
+        \begin{itemize}
+            \item Para la función sigmoidea
+                \begin{align*}
+                      & a^{capa}(z^{capa}) = \frac{1}{1 + e^{-z^{capa}}} \\
+                      & \frac{\partial a^{capa}}{\partial z^{capa}}=\\
+                    = &a^{capa}(z^{capa})*(1-a^{capa}(z^{capa}))
+                \end{align*}
+
+        \end{itemize}
+    \item Derivada de la suma ponderada Z(red neuronal), con respecto a dos
+        parámetros(pesos y bias(o termino de sesgo).
+        \begin{align*}
+            \frac{\partial Z^{capa}}{\partial w^{capa}}  & \ \frac{\partial
+            Z^{capa}}{\partial b^{capa}}\\
+            Z^{c} & = \sum_i a_i^{c -1} w_i^c + b^c \\
+            Derivada\ del &\ parametro\ b\\
+            \frac{\partial z^{c}}{\partial b^c} & = 1\\
+            Derivada\ del &\ parametro\ z\\
+            \frac{\partial Z^c}{\partial w^c} =& a_i^{capa -1}\\
+        \end{align*}
+    \item Error imputado para cada neurona
+        \begin{equation*}
+            \delta^c = \frac{\partial C}{\partial a^{capa}} * \frac{\partial
+            a^{capa}}{\partial z^{capa}}
+        \end{equation*}
+        {\tiny ** Para la ultima capa de un red neuronal se tiene entonces la
+        multiplicación de las ecuaciones anteriores. }
+        \begin{align*}
+            \frac{\partial C}{\partial w^{c}} &= \delta^c* \frac{\partial
+            z^{c}}{\partial w^{c}} \\
+            \frac{\partial C}{\partial b^{c}} &= \delta^c* \frac{\partial
+            z^{c}}{\partial b^{c}} \\
+        \end{align*}
+\end{itemize}
+\par Derivadas para las capas anteriores
+\begin{itemize}
+    \item Composición de funciones para las capas anteriores
+        \begin{equation*}
+            C(a^c(W^c a^{c-1}(W^{c-1}a^{c-2} + b^{c-1}) + b^c))
+        \end{equation*}
+    \item Derivadas
+        \begin{align*}
+            \frac{\partial C}{\partial w^{c-1}} &= \delta^c* \frac{\partial
+            z^c}{\partial a^{c-1}}*\frac{\partial a^{c-1}}{\partial z^{c-1}}*
+            \frac{\partial z^{c-1}}{\partial w^{c-1}} \\ 
+            \frac{\partial C}{\partial b^{c-1}} &= \delta^c* \frac{\partial
+            z^c}{\partial a^{c-1}}*\frac{\partial a^{c-1}}{\partial z^{c-1}} *
+            \frac{\partial z^{c-1}}{\partial b^{c-1}} \\
+        \end{align*}                                             
+\end{itemize}
+
+Finalmente aplicando la misma lógica a toda la red de neuronas tememos el
+siguiente algoritmo
+
+\begin{itemize}
+    \item Computo del error de la ultima capa
+        \begin{equation*}
+            \delta ^c = \frac{\partial Coste}{\partial a^c} * \frac{\partial
+            a^c}{\partial z^c}
+        \end{equation*}
+    \item Retro-propagar el error a la capa anterior
+        \begin{equation*}
+            \delta ^{c-1} = w^c\delta^c * \frac{\partial a^{c-1}}{\partial
+            z^{c-1}}
+        \end{equation*}
+    \item Calculamos las derivadas de la capa usando el error
+        \begin{align*}
+                    &\frac{\partial coste}{\partial b^{c-1}} = \delta^{c-1} \\
+                    &\frac{\partial coste}{\partial w^{c-1}} = \delta^{c-1}
+                    a^{c-2}
+        \end{align*}
+\end{itemize}

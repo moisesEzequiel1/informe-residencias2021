@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+docker run \PYGZhy{}\PYGZhy{}rm telegraf telegraf config \PYGZgt{} telegraf.conf
+\end{Verbatim}

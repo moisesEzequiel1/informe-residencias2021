@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+.\PYG{o}{(}directorio base\PYG{o}{)}
+\PYGZhy{}\PYGZhy{}docker\PYGZhy{}compose.yml
+\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}mosquitto
+     \PYGZhy{}\PYGZhy{}mosquitto.conf
+\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}telegraf
+     \PYGZhy{}\PYGZhy{}telegraf.conf
+\end{Verbatim}

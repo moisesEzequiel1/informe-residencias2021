@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+ \PYG{o}{[[}inputs.mqtt\PYGZus{}consumer\PYG{o}{]]}
+   \PYG{n+nv}{servers} \PYG{o}{=} \PYG{o}{[}\PYG{l+s+s2}{\PYGZdq{}tcp://mosquitto:1883\PYGZdq{}}\PYG{o}{]}
+
+   \PYG{n+nv}{topics} \PYG{o}{=} \PYG{o}{[}
+     \PYG{l+s+s2}{\PYGZdq{}esp23/\PYGZsh{}\PYGZdq{}} //indica que nos queremos subscribir  a todos los topics a
+     //partir de esp32
+   \PYG{o}{]}
+
+   \PYG{n+nv}{data\PYGZus{}format} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}influx\PYGZdq{}}
+\end{Verbatim}
